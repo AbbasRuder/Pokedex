@@ -2,33 +2,24 @@ import React from "react";
 import img from "../assets/pikachu.png"
 
 export default function Pokemon() {
+
+    // const PokemonCard = ({ name, image, abilities })
     return (
         <>
-            {/* <div classNameNameName="bg-orange-600">
-                <img
-                    classNameNameName="w-56"
-                    src={img}/>
-                <div>#001</div>
-            </div> */}
-            <div className="flex-col w-52 h-full max-w-xs rounded-lg bg-orange-600 ">
-                <a href="#!">
-                    <img
-                        className="border border-white rounded-lg"
-                        src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/251.png"
-                        alt=""
-                    />
-                </a>
-                <div className="p-6">
-                    <h5
-                        className="mb-2 text-md font-medium text-center leading-tight text-neutral-800 dark:text-neutral-50">
-                        Calebi
-                    </h5>
-                    <p className="mb-4 text-sm text-white">
-                        A fun pokemon ultil it is hungry.
-                    </p>
-                    {/* <button className="mx-14">
-                        Button
-                    </button> */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden w-52 max-w-xs">
+                <img className="w-1/2 mx-auto" src={img} />
+                <div className="p-4">
+                    <h2 className="text-lg font-medium text-gray-800">Name</h2>
+                    <div className="mt-2 text-sm text-gray-600">
+                    <p className="text-gray-700">Abilities:</p>
+                    <ul className="list-disc pl-5">
+                        {/* {abilities.map((ability, index) => (
+                        <li key={index}>{ability.ability.name}</li>
+                        ))} */}
+                        <li>Ability 1</li>
+                        <li>Ability 2</li>
+                    </ul>
+                    </div>
                 </div>
             </div>
         </>

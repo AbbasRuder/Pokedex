@@ -8,7 +8,7 @@ function App() {
   return (
     <>
         <Pokemon />
-      <div className="flex gap-x-10 gap-y-4 mx-16 flex-wrap mb-10">
+      <div className="flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
         <PokemonCard />
         <PokemonCard />
         <PokemonCard />

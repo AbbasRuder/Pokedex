@@ -11,7 +11,8 @@ export default function Pokemon() {
                 return axios.get(pokemon.url).then(response => {
                     return {
                         name: response.data.name,
-                        image: response.data.sprites.other.dream_world.front_default
+                        image: response.data.sprites.other.dream_world.front_default,
+                        colorType: response.data.types.map(type => type.type.name)
                     }
                 })
             })
@@ -21,8 +22,10 @@ export default function Pokemon() {
             })
         })
 
-    },[])
+    
 
+    },[])
+    // console.log(PokemonData.map(pokemon => pokemon.name));
 
     return (
         <>
@@ -33,9 +36,8 @@ export default function Pokemon() {
             {/* Pokemon Card Component */}
             <div className="flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
                 {PokemonData.map(pokemon => 
-                    <PokemonCard key={pokemon.name} name={pokemon.name} image={pokemon.image}/>)}
+                    <PokemonCard key={pokemon.name} name={pokemon.name} image={pokemon.image} colorType={pokemon.colorType}/>)}
             </div>
-
         </>
     )
 }

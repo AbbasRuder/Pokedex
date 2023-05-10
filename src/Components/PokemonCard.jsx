@@ -1,13 +1,16 @@
 import React from "react";
+// import '../Components/PokemonCard.css'
 
-export default function Pokemon({name, image}) {
+export default function Pokemon({name, image, colorType}) {
    const Capname = name[0].toUpperCase() + name.slice(1)
+//    console.log(colorType[1]);
+  
     return (
         <>
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-52 max-w-xs">
-                <div className="bg-red-100">
-                    <img className="w-full h-36 mx-auto lg:w-1/2" src={image} 
-                /></div>
+                <div className={`${colorType[1] ? `bg-gradient-to-r from-${colorType[0]} to-${colorType[1]}` : `bg-${colorType[0]}`}`}>
+                    <img className="w-full h-36 mx-auto lg:w-1/2" src={image} />
+                </div>
                 <div className="p-4">
                     <h2 className="text-lg text-center font-medium text-gray-800">{Capname}</h2>
                     <div className="mt-2 text-sm text-gray-600">
@@ -22,3 +25,7 @@ export default function Pokemon({name, image}) {
         </>
     )
 }
+
+// {`${colorType[1] ? `bg-gradient-to-r from-${colorType[0]} to-${colorType[1]}` : `bg-${colorType}`}`}
+// `${colorType[1] ? `bg-gradient-to-r from-${typeColors[colorType[0]]} to-${typeColors[colorType[1]]}` : `bg-${typeColors[colorType[0]]}`}`
+

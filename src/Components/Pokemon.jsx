@@ -1,5 +1,7 @@
 import PokemonCard from './PokemonCard'
+import PokemonDetails from './PokemonDetails'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 export default function Pokemon() {
@@ -16,14 +18,12 @@ export default function Pokemon() {
                     }
                 })
             })
-
+            // Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
             Promise.all(data).then(pokemon => {
                 SetPokemonData(pokemon)
+                // console.log(pokemon)
             })
         })
-
-    
-
     },[])
     // console.log(PokemonData.map(pokemon => pokemon.name));
 
@@ -31,12 +31,14 @@ export default function Pokemon() {
         <>
             {/* Main Page Heading */}
             <div className="border mb-10">
-                <h1 className="text-xl font-bold text-center p-6">Pokemon Cards</h1>
+                <h1 className="text-3xl font-bold text-center p-6">Pokemon Cards</h1>
             </div>
             {/* Pokemon Card Component */}
-            <div className="flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
-                {PokemonData.map(pokemon => 
-                    <PokemonCard key={pokemon.name} name={pokemon.name} image={pokemon.image} colorType={pokemon.colorType}/>)}
+            <div className="mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
+                {PokemonData.map(pokemon =>
+                    <Link to={`${pokemon.name}`}>
+                    <PokemonCard key={pokemon.name} name={pokemon.name} image={pokemon.image} colorType={pokemon.colorType}/>
+                    </Link>)}
             </div>
         </>
     )

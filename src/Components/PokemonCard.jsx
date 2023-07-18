@@ -1,8 +1,8 @@
 import React from "react";
 // import '../Components/PokemonCard.css'
 
-export default function Pokemon({name, image, colorType}) {
-   const Capname = name[0].toUpperCase() + name.slice(1)
+export default function PokemonCard({name, image, colorType}) {
+   const capitalName = name[0].toUpperCase() + name.slice(1)
 //    console.log(colorType[1]);
   
     return (
@@ -12,7 +12,7 @@ export default function Pokemon({name, image, colorType}) {
                     <img className="w-full h-36 mx-auto lg:w-1/2" src={image} />
                 </div>
                 <div className="p-4">
-                    <h2 className="text-lg text-center font-medium text-gray-800">{Capname}</h2>
+                    <h2 className="text-lg text-center font-medium text-gray-800">{capitalName}</h2>
                     <div className="mt-2 text-sm text-gray-600">
                     <p className="text-gray-700">Abilities:</p>
                     <ul className="list-disc pl-5">

@@ -18,7 +18,7 @@ export default function Pokemon() {
                     }
                 })
             })
-            // Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
+            //---> Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
             Promise.all(data).then(pokemon => {
                 SetPokemonData(pokemon)
                 // console.log(pokemon)

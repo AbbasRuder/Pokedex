@@ -5,6 +5,8 @@ import axios from "axios";
 export default function PokemonDetails() {
     const [data, setData] = useState({});
     const [desc, setDesc] = useState("");
+    
+    // this id is the value that is being passed using <Link to=' '/>. In our case it is the name of the pokemon
     const { id } = useParams();
     
     useEffect(() => {

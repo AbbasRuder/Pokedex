@@ -8,7 +8,8 @@ export default function PokemonCard({name, image, colorType}) {
     return (
         <>
             <div className="bg-white rounded-lg shadow-md overflow-hidden w-52 max-w-xs">
-                <div className={`${colorType[1] ? `bg-gradient-to-r from-${colorType[0]} to-${colorType[1]}` : `bg-${colorType[0]}`}`}>
+                <div className=''>
+                {/* <div className={`${colorType[1] ? `bg-gradient-to-r from-${colorType[0]} to-${colorType[1]}` : `bg-${colorType[0]}`}`}> */}
                     <img className="w-full h-36 mx-auto lg:w-1/2" src={image} />
                 </div>
                 <div className="p-4">

@@ -38,7 +38,7 @@ export default function PokemonDetails() {
     
     return (
     <>
-      <div className="p-64">
+      <div className="m-64">
         <div className="">
           <h1>This is {id} </h1>
           <p>{desc}</p>

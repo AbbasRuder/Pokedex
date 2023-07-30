@@ -15,11 +15,11 @@ export default function PokemonCard({name, image, colorType}) {
                 <div className="p-4">
                     <h2 className="text-lg text-center font-medium text-gray-800">{capitalName}</h2>
                     <div className="mt-2 text-sm text-gray-600">
-                    <p className="text-gray-700">Abilities:</p>
+                    {/* <p className="text-gray-700">Abilities:</p>
                     <ul className="list-disc pl-5">
                         <li>Electricity</li>
                         <li>Thunder</li>
-                    </ul>
+                    </ul> */}
                     </div>
                 </div>
             </div>

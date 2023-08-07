@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// } from 'chart.js';
+// import { Bar } from 'react-chartjs-2';
 
 export default function PokemonDetails() {
   const [pokeData, setPokeData] = useState(null);
@@ -72,41 +72,41 @@ export default function PokemonDetails() {
   console.log(pokeSpeciesData);
 
   // ----------------------------    Bar Chart     ----------------------------
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    // Tooltip,
-    Legend
-  );
+  // ChartJS.register(
+  //   CategoryScale,
+  //   LinearScale,
+  //   BarElement,
+  //   Title,
+  //   // Tooltip,
+  //   Legend
+  // );
 
-  const options = {
-    // responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-        position: 'bottom',
-      },
-      title: {
-        display: true,
-        text: 'Abilities',
-      },
-    },
-  };
+  // const options = {
+  //   // responsive: true,
+  //   plugins: {
+  //     legend: {
+  //       display: false,
+  //       position: 'bottom',
+  //     },
+  //     title: {
+  //       display: true,
+  //       text: 'Abilities',
+  //     },
+  //   },
+  // };
 
-  const labels = pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.stat.name) : [];
+  // const labels = pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.stat.name) : [];
 
-  const barData = {
-    labels,
-    datasets: [
-      {
-        // label: 'Dataset 1',
-        data: pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.base_stat) : [],
-        backgroundColor: `${pokeSpeciesData && pokeSpeciesData.color}`
-      },
-    ],
-  };
+  // const barData = {
+  //   labels,
+  //   datasets: [
+  //     {
+  //       // label: 'Dataset 1',
+  //       data: pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.base_stat) : [],
+  //       backgroundColor: `${pokeSpeciesData && pokeSpeciesData.color}`
+  //     },
+  //   ],
+  // };
 
   return (
     <>
@@ -115,19 +115,24 @@ export default function PokemonDetails() {
       ) : (
 
         pokeData &&
-        <div className="flex flex-col lg:flex-row h-screen bg-[#242424]">
+        <div className="flex flex-col lg:flex-row h-screen">
 
           {/* left */}
-          <div className="w-full lg:w-4/12 px-6 py-32 bg-slate-100">
+          <div className="w-full px-6 py-32 bg-slate-100">
+
+            
 
             <div className="flex flex-col gap-16">
               <div className="flex flex-col items-center gap-2">
-                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-[#242424]"  style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-[#242424]" style={{ borderColor: `${pokeSpeciesData.color}` }}>
                   <img className="h-36 w-36" src={pokeData.image} />
                 </div>
-                <h1 className="mt-6 capitalize text-4xl font-bold underline" >
-                  {id}
-                </h1>
+                <div className="flex mt-6 gap-2">
+                  <h1 className="text-4xl font-bold underline">#{pokeData.id}.</h1>
+                  <h1 className="capitalize text-4xl font-bold underline" >
+                    {id}
+                  </h1>
+                </div>
                 <div >
                   {pokeData.types.map(item => {
                     return (
@@ -146,13 +151,12 @@ export default function PokemonDetails() {
 
           </div>
 
-          {/* right */}
+          {/* ------------------- Bar Chart -------------------
           <div className="w-full lg:w-8/12 bg-[#242424]">
-            <h1 className="text-7xl font-bold text-slate-100 p-4">#{pokeData.id}</h1>
-            <div className="w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
+            <div className="md:w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
               <Bar options={options} data={barData} />
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </>

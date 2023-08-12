@@ -4,6 +4,7 @@ import axios from 'axios'
 import PokemonCard from './PokemonCard'
 import Pagination from './Pagination'
 import Loading from './Loading'
+import { stringify } from 'postcss'
 
 export default function Pokemon() {
     // const [allPokemonData, setAllPokemonData] = useState([])
@@ -25,7 +26,7 @@ export default function Pokemon() {
             setNextPageURL(response.data.next)
             setPrevPageURL(response.data.previous)
 
-            // fetching all the data of indiviual pokemons
+            // fetching all the data of individual pokemon's
             const data = response.data.results.map(pokemon => {
                 return axios.get(pokemon.url).then(response => {
                     return response.data
@@ -45,11 +46,20 @@ export default function Pokemon() {
                 ))
             })
 
-            // setting loading state to false whenever fetching is completed
+            // If Fetching is complete, displaying the loading screen for at least 1.3s and then setting it to false. --> This is to avoid the quick flashes of the bg which doesn't look good.
             setTimeout(() => {
-                setLoading(false); // Hide the "loading" text (if needed)
-                setShowLoading(false); // Hide the loading screen
-              }, 1300); // 1000 milliseconds = 1 seconds
+                setLoading(false);
+            }, 1300); // 1000 milliseconds = 1 seconds
+
+            // Set pagination data from local storage
+            const storedPageData = JSON.parse(localStorage.getItem('pokemonPageData'));
+            if (storedPageData) {
+                setCurrentPageURL(storedPageData.currentPageURL);
+                setNextPageURL(storedPageData.nextPageURL);
+                setPrevPageURL(storedPageData.prevPageURL);
+
+                localStorage.removeItem('pokemonPageData');
+            }
 
         })
             .catch(error => {
@@ -67,6 +77,15 @@ export default function Pokemon() {
 
     const gotoPrevPage = () => {
         setCurrentPageURL(prevPageURL)
+    }
+
+    const storePageData = () => {
+        const pageData = {
+            currentPageURL,
+            nextPageURL,
+            prevPageURL,
+        }
+        localStorage.setItem('pokemonPageData', JSON.stringify(pageData))
     }
 
 
@@ -88,7 +107,7 @@ export default function Pokemon() {
                         <div className="mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
                             {pokemonData.map(mapItem =>
                                 <Link to={mapItem.name} key={mapItem.name}>
-                                    <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} />
+                                    <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} storePageData={storePageData} />
                                 </Link>)}
                         </div>
 

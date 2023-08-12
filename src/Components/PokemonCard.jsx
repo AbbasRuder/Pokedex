@@ -1,7 +1,7 @@
 import React from "react";
 import './PokemonCard.css'
 
-export default function PokemonCard({ name, image, types }) {
+export default function PokemonCard({ name, image, types, storePageData }) {
     const capitalName = name[0].toUpperCase() + name.slice(1)
     const typeName = types.map(item => item.type.name)
 
@@ -339,7 +339,7 @@ export default function PokemonCard({ name, image, types }) {
   
     return (
         <>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden w-52 max-w-xs">
+            <div className="bg-white rounded-lg shadow-md overflow-hidden w-52 max-w-xs" onClick={storePageData}>
                 <div className=''>
                     <div className={`${typeName[1] ? `bg-gradient-to-r from-${typeName[0]} to-${typeName[1]}` : `bg-${typeName[0]}`}`}>
 

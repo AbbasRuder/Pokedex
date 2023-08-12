@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 import './PokemonCard.css'
+import PokemonHeading from "./PokemonHeading";
 
 // import {
 //   Chart as ChartJS,
@@ -110,54 +111,58 @@ export default function PokemonDetails() {
 
   return (
     <>
+      <PokemonHeading />
       {loading ? (
         <Loading />
       ) : (
 
         pokeData &&
-        <div className="flex flex-col lg:flex-row h-screen">
+        <>
+          <div className="flex flex-col lg:flex-row h-screen">
 
-          <div className="w-full h-screen px-6 py-32 bg-slate-100">
+            <div className="w-full h-screen px-6 py-32 bg-slate-100">
 
-            <div className="flex flex-col gap-16">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-slate-300" style={{ borderColor: `${pokeSpeciesData.color}` }}>
-                  <img className="h-36 w-36" src={pokeData.image} />
+              <div className="flex flex-col gap-16">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-slate-300" style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                    <img className="h-36 w-36" src={pokeData.image} />
+                  </div>
+
+                  <div className="flex gap-6  ">
+                    {pokeData.types.map((type, index) => (
+                      <div className={`icon ${type} flex flex-col items-center gap-2`} key={index}>
+                        <img src={`/assets/icons/${type}.svg`} alt={type} className="" />
+                        <h3 className="uppercase font-semibold opacity-20">{type}</h3>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex mt-14 gap-2">
+                    <h1 className="text-4xl font-bold underline  decoration-2 decoration-sky-500/30">
+                      #{pokeData.id}.
+                    </h1>
+                    <h1 className="capitalize text-4xl font-bold underline  decoration-2 decoration-sky-500/30" >
+                      {id}
+                    </h1>
+                  </div>
+
                 </div>
 
-                <div className="flex gap-6  ">
-                  {pokeData.types.map((type, index) => (
-                    <div className={`icon ${type} flex flex-col items-center gap-2`} key={index}>
-                      <img src={`/assets/icons/${type}.svg`} alt={type} className="" />
-                      <h3 className="uppercase font-semibold opacity-20">{type}</h3>
-                    </div>
-                  ))}
+                <div>
+                  <p className="text-center text-lg">{pokeSpeciesData.desc}</p>
                 </div>
-
-                <div className="flex mt-14 gap-2">
-                  <h1 className="text-4xl font-bold underline  decoration-2 decoration-sky-500/30">
-                    #{pokeData.id}.
-                  </h1>
-                  <h1 className="capitalize text-4xl font-bold underline  decoration-2 decoration-sky-500/30" >
-                    {id}
-                  </h1>
-                </div>
-               
-              </div>
-
-              <div>
-                <p className="text-center text-lg">{pokeSpeciesData.desc}</p>
               </div>
             </div>
           </div>
+          </>
 
-          {/* ------------------- Bar Chart -------------------
-          <div className="w-full lg:w-8/12 bg-[#242424]">
-            <div className="md:w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
-              <Bar options={options} data={barData} />
-            </div>
-          </div> */}
-        </div>
+          // ------------------- Bar Chart -------------------
+          // <div className="w-full lg:w-8/12 bg-[#242424]">
+          //   <div className="md:w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
+          //     <Bar options={options} data={barData} />
+          //   </div>
+          // </div> 
+        
       )}
     </>
   );

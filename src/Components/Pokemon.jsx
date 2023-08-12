@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import PokemonHeading from './PokemonHeading'
 import PokemonCard from './PokemonCard'
 import Pagination from './Pagination'
 import Loading from './Loading'
-import { stringify } from 'postcss'
+
 
 export default function Pokemon() {
     // const [allPokemonData, setAllPokemonData] = useState([])
@@ -13,11 +14,11 @@ export default function Pokemon() {
     const [nextPageURL, setNextPageURL] = useState()
     const [prevPageURL, setPrevPageURL] = useState()
     const [loading, setLoading] = useState(false)
-    const [showLoading, setShowLoading] = useState(true)
+
 
 
     useEffect(() => {
-        // setting loading state to true whenever useeffect loads
+        // setting loading state to true whenever useEffect loads
         setLoading(true)
         setPokemonData([])
         axios.get(currentPageURL).then(response => {
@@ -99,12 +100,10 @@ export default function Pokemon() {
                 ) : (
                     <>
                         {/*------ Main Page Heading ------*/}
-                        <div className="border mb-10">
-                            <h1 className="text-3xl font-bold text-center p-6">Pokemon Cards</h1>
-                        </div>
+                        <PokemonHeading />
 
                         {/*------ Pokemon Card Component ------ */}
-                        <div className="mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
+                        <div className="mt-10 mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
                             {pokemonData.map(mapItem =>
                                 <Link to={mapItem.name} key={mapItem.name}>
                                     <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} storePageData={storePageData} />

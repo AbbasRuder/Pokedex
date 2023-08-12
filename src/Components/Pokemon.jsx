@@ -6,7 +6,7 @@ import Pagination from './Pagination'
 import Loading from './Loading'
 
 export default function Pokemon() {
-    const [allPokemonData, setAllPokemonData] = useState([])
+    // const [allPokemonData, setAllPokemonData] = useState([])
     const [pokemonData, setPokemonData] = useState([])
     const [currentPageURL, setCurrentPageURL] = useState("https://pokeapi.co/api/v2/pokemon")
     const [nextPageURL, setNextPageURL] = useState()
@@ -34,12 +34,13 @@ export default function Pokemon() {
 
             //---> Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
             Promise.all(data).then(response => {
-                console.log(response);
-                setAllPokemonData(response);
+                // console.log(response);
+                // setAllPokemonData(response);
                 setPokemonData(response.map(poke => (
                     {
                         name: poke.name,
-                        image: poke.sprites.other.dream_world.front_default
+                        image: poke.sprites.other.dream_world.front_default,
+                        types: poke.types
                     })
                 ))
             })
@@ -69,8 +70,7 @@ export default function Pokemon() {
     }
 
 
-    // console.log("data",allPokemonData)
-    // console.log("url", nextPageURL);
+    // console.log("data", pokemonData)
 
     return (
         <>
@@ -86,15 +86,15 @@ export default function Pokemon() {
 
                         {/*------ Pokemon Card Component ------ */}
                         <div className="mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
-                            {pokemonData.map(pokemon =>
-                                <Link to={`${pokemon.name}`} key={pokemon.name}>
-                                    <PokemonCard key={pokemon.name} name={pokemon.name} image={pokemon.image} />
+                            {pokemonData.map(mapItem =>
+                                <Link to={mapItem.name} key={mapItem.name}>
+                                    <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} />
                                 </Link>)}
                         </div>
 
                         {/*------ Pagination ------ */}
                         <div className="flex justify-center mb-10">
-                            {/*We are passing function props conditionaly so that we can disable the previous/next button if there are no previous/next page */}
+                            {/*We are passing function props conditionally so that we can disable the previous/next button if there are no previous/next page */}
                             <Pagination gotoNextPage={nextPageURL ? gotoNextPage : null} gotoPrevPage={prevPageURL ? gotoPrevPage : null} />
                         </div>
                     </>

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
+import './PokemonCard.css'
 
 // import {
 //   Chart as ChartJS,
@@ -35,7 +36,7 @@ export default function PokemonDetails() {
           `https://pokeapi.co/api/v2/pokemon-species/${id}`
         );
 
-        console.log(pokemonSpeciesData);
+        // console.log(pokemonSpeciesData);
 
         const data = {
           id: pokemonData.data.id,
@@ -68,8 +69,7 @@ export default function PokemonDetails() {
     fetchData();
   }, [id]);
 
-  console.log('f', pokeData);
-  console.log(pokeSpeciesData);
+
 
   // ----------------------------    Bar Chart     ----------------------------
   // ChartJS.register(
@@ -117,38 +117,38 @@ export default function PokemonDetails() {
         pokeData &&
         <div className="flex flex-col lg:flex-row h-screen">
 
-          {/* left */}
-          <div className="w-full px-6 py-32 bg-slate-100">
-
-            
+          <div className="w-full h-screen px-6 py-32 bg-slate-100">
 
             <div className="flex flex-col gap-16">
               <div className="flex flex-col items-center gap-2">
-                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-[#242424]" style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-slate-300" style={{ borderColor: `${pokeSpeciesData.color}` }}>
                   <img className="h-36 w-36" src={pokeData.image} />
                 </div>
-                <div className="flex mt-6 gap-2">
-                  <h1 className="text-4xl font-bold underline">#{pokeData.id}.</h1>
-                  <h1 className="capitalize text-4xl font-bold underline" >
+
+                <div className="flex gap-6  ">
+                  {pokeData.types.map((type, index) => (
+                    <div className={`icon ${type} flex flex-col items-center gap-2`} key={index}>
+                      <img src={`/assets/icons/${type}.svg`} alt={type} className="" />
+                      <h3 className="uppercase font-semibold opacity-20">{type}</h3>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex mt-14 gap-2">
+                  <h1 className="text-4xl font-bold underline  decoration-2 decoration-sky-500/30">
+                    #{pokeData.id}.
+                  </h1>
+                  <h1 className="capitalize text-4xl font-bold underline  decoration-2 decoration-sky-500/30" >
                     {id}
                   </h1>
                 </div>
-                <div >
-                  {pokeData.types.map(item => {
-                    return (
-                      <span className="text-black text-xs font-semibold mr-2 px-2.5 py-0.5 rounded uppercase " style={{ backgroundColor: `${pokeSpeciesData.color}` }}>
-                        {item}
-                      </span>
-                    )
-                  })}
-                </div>
-
+               
               </div>
+
               <div>
                 <p className="text-center text-lg">{pokeSpeciesData.desc}</p>
               </div>
             </div>
-
           </div>
 
           {/* ------------------- Bar Chart -------------------

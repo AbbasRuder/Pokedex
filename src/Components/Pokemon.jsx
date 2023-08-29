@@ -34,9 +34,8 @@ export default function Pokemon() {
                 })
             })
 
-            //---> Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
+            // Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
             Promise.all(data).then(response => {
-                // console.log(response);
                 // setAllPokemonData(response);
                 setPokemonData(response.map(poke => (
                     {
@@ -50,15 +49,16 @@ export default function Pokemon() {
             // If Fetching is complete, displaying the loading screen for at least 1.3s and then setting it to false. --> This is to avoid the quick flashes of the bg which doesn't look good.
             setTimeout(() => {
                 setLoading(false);
-            }, 1300); // 1000 milliseconds = 1 seconds
+            }, 1300);
 
-            // Set pagination data from local storage
+            // Set pagination data from local storage 
             const storedPageData = JSON.parse(localStorage.getItem('pokemonPageData'));
             if (storedPageData) {
                 setCurrentPageURL(storedPageData.currentPageURL);
                 setNextPageURL(storedPageData.nextPageURL);
                 setPrevPageURL(storedPageData.prevPageURL);
 
+                // cleaning local-Storage to avoid unwanted behaviors
                 localStorage.removeItem('pokemonPageData');
             }
 
@@ -80,6 +80,7 @@ export default function Pokemon() {
         setCurrentPageURL(prevPageURL)
     }
 
+    // storing the current page url's to local-storage
     const storePageData = () => {
         const pageData = {
             currentPageURL,
@@ -89,8 +90,6 @@ export default function Pokemon() {
         localStorage.setItem('pokemonPageData', JSON.stringify(pageData))
     }
 
-
-    // console.log("data", pokemonData)
 
     return (
         <>
@@ -121,6 +120,5 @@ export default function Pokemon() {
 
 
         </>
-        // <></>
     )
 }

@@ -1,20 +1,10 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 import './PokemonCard.css'
 import PokemonHeading from "./PokemonHeading";
+import { useParams } from "react-router-dom";
 
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-// import { Bar } from 'react-chartjs-2';
 
 export default function PokemonDetails() {
   const [pokeData, setPokeData] = useState(null);
@@ -23,7 +13,7 @@ export default function PokemonDetails() {
 
   // this id is the value that is being passed using <Link to=' '/>. In our case it is the name of the pokemon
   const { id } = useParams();
-
+  // --> useParams returns the route parameters as a key value pair, where 'id' is the key and the parameter is the value
 
   useEffect(() => {
     setLoading(true)
@@ -69,45 +59,6 @@ export default function PokemonDetails() {
     };
     fetchData();
   }, [id]);
-
-
-
-  // ----------------------------    Bar Chart     ----------------------------
-  // ChartJS.register(
-  //   CategoryScale,
-  //   LinearScale,
-  //   BarElement,
-  //   Title,
-  //   // Tooltip,
-  //   Legend
-  // );
-
-  // const options = {
-  //   // responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       display: false,
-  //       position: 'bottom',
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: 'Abilities',
-  //     },
-  //   },
-  // };
-
-  // const labels = pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.stat.name) : [];
-
-  // const barData = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       // label: 'Dataset 1',
-  //       data: pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.base_stat) : [],
-  //       backgroundColor: `${pokeSpeciesData && pokeSpeciesData.color}`
-  //     },
-  //   ],
-  // };
 
   return (
     <>
@@ -155,13 +106,6 @@ export default function PokemonDetails() {
             </div>
           </div>
           </>
-
-          // ------------------- Bar Chart -------------------
-          // <div className="w-full lg:w-8/12 bg-[#242424]">
-          //   <div className="md:w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
-          //     <Bar options={options} data={barData} />
-          //   </div>
-          // </div> 
         
       )}
     </>

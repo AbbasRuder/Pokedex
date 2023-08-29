@@ -51,7 +51,7 @@ export default function Pokemon() {
                 setLoading(false);
             }, 1300);
 
-            // Set pagination data from local storage 
+            // Get pagination data from local storage 
             const storedPageData = JSON.parse(localStorage.getItem('pokemonPageData'));
             if (storedPageData) {
                 setCurrentPageURL(storedPageData.currentPageURL);
@@ -99,7 +99,7 @@ export default function Pokemon() {
                 ) : (
                     <>
                         {/*------ Main Page Heading ------*/}
-                        <PokemonHeading />
+                        <PokemonHeading storePageData={storePageData}/>
 
                         {/*------ Pokemon Card Component ------ */}
                         <div className="mt-10 mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">

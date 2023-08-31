@@ -1,28 +1,21 @@
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 import './PokemonCard.css'
+import PokemonHeading from "./PokemonHeading";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-// import {
-//   Chart as ChartJS,
-//   CategoryScale,
-//   LinearScale,
-//   BarElement,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
-// import { Bar } from 'react-chartjs-2';
 
 export default function PokemonDetails() {
   const [pokeData, setPokeData] = useState(null);
   const [pokeSpeciesData, setPokeSpeciesData] = useState(null)
+  const [pokemonEvolutionData, setPokemonEvolutionData] = useState(null)
   const [loading, setLoading] = useState(false);
 
   // this id is the value that is being passed using <Link to=' '/>. In our case it is the name of the pokemon
   const { id } = useParams();
-
+  // --> useParams returns the route parameters as a key value pair, where 'id' is the key and the parameter is the value
 
   useEffect(() => {
     setLoading(true)
@@ -36,8 +29,6 @@ export default function PokemonDetails() {
           `https://pokeapi.co/api/v2/pokemon-species/${id}`
         );
 
-        // console.log(pokemonSpeciesData);
-
         const data = {
           id: pokemonData.data.id,
           stats: pokemonData.data.stats,
@@ -45,12 +36,11 @@ export default function PokemonDetails() {
           abilities: pokemonData.data.abilities,
           height: pokemonData.data.height,
           types: pokemonData.data.types.map(item => item.type.name),
-
         };
         setPokeData(data);
 
         const speciesData = {
-          desc: pokemonSpeciesData.data.flavor_text_entries[0].flavor_text,
+          desc: pokemonSpeciesData.data.flavor_text_entries[10].flavor_text,
           happiness: pokemonSpeciesData.data.base_happiness,
           capture_rate: pokemonSpeciesData.data.capture_rate,
           color: pokemonSpeciesData.data.color.name,
@@ -58,8 +48,38 @@ export default function PokemonDetails() {
           mythical: pokemonSpeciesData.data.is_mythical,
           legendary: pokemonSpeciesData.data.is_legendary
         }
-
         setPokeSpeciesData(speciesData);
+
+        // Fetching Evolution Chain data
+        const evolutionChainUrl = pokemonSpeciesData.data.evolution_chain.url
+        const EvolutionChain = await axios.get(
+          `${evolutionChainUrl}`
+        )
+        const pokemonEvolutionChain = {
+          first: EvolutionChain.data.chain.species.name,
+          second: EvolutionChain.data.chain.evolves_to[0].species.name,
+          third: EvolutionChain.data.chain.evolves_to[0]?.evolves_to[0]?.species.name
+        }
+        // fetching name and image of each pokemon in the evolution chain.
+        const evolutionDataPromises = Object.values(pokemonEvolutionChain).map(async pokemon => {
+          // checking for falsy because the 'third' object may not be present
+          if (pokemon) {
+            try {
+              const data = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`)
+              const evolutionData = {
+                name: data.data.name,
+                image: data.data.sprites.other.dream_world.front_default,
+              }
+              return evolutionData
+            } catch (error) {
+              console.error('Error fetching Pokemon Evolution data', error)
+            }
+          }
+        })
+
+        const evolutionDataArray = await Promise.all(evolutionDataPromises)
+        setPokemonEvolutionData(evolutionDataArray)
+
         setLoading(false)
       } catch (error) {
         setLoading(false)
@@ -67,98 +87,92 @@ export default function PokemonDetails() {
       }
     };
     fetchData();
+
   }, [id]);
 
+  const filteredDesc = pokeSpeciesData && pokeSpeciesData.desc.replace('POKéMON', 'pokemon')
 
-
-  // ----------------------------    Bar Chart     ----------------------------
-  // ChartJS.register(
-  //   CategoryScale,
-  //   LinearScale,
-  //   BarElement,
-  //   Title,
-  //   // Tooltip,
-  //   Legend
-  // );
-
-  // const options = {
-  //   // responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       display: false,
-  //       position: 'bottom',
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: 'Abilities',
-  //     },
-  //   },
-  // };
-
-  // const labels = pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.stat.name) : [];
-
-  // const barData = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       // label: 'Dataset 1',
-  //       data: pokeData && Array.isArray(pokeData.stats) ? pokeData.stats.map(item => item.base_stat) : [],
-  //       backgroundColor: `${pokeSpeciesData && pokeSpeciesData.color}`
-  //     },
-  //   ],
-  // };
+  const pokemonType = pokeData && pokeData.types.map(item => item)
 
   return (
     <>
+      <PokemonHeading />
       {loading ? (
         <Loading />
       ) : (
 
         pokeData &&
-        <div className="flex flex-col lg:flex-row h-screen">
+        <>
+          <div className={`pb-10 ${pokemonType[1] ? `bg-gradient-to-r from-${pokemonType[0]} to-${pokemonType[1]}` : `bg-${pokemonType[0]}`}`}>
+            <div className="flex flex-col lg:flex-row">
 
-          <div className="w-full h-screen px-6 py-32 bg-slate-100">
+              <div className="w-full px-6 pt-20">
 
-            <div className="flex flex-col gap-16">
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-slate-300" style={{ borderColor: `${pokeSpeciesData.color}` }}>
-                  <img className="h-36 w-36" src={pokeData.image} />
-                </div>
-
-                <div className="flex gap-6  ">
-                  {pokeData.types.map((type, index) => (
-                    <div className={`icon ${type} flex flex-col items-center gap-2`} key={index}>
-                      <img src={`/assets/icons/${type}.svg`} alt={type} className="" />
-                      <h3 className="uppercase font-semibold opacity-20">{type}</h3>
+                <div className="flex flex-col gap-16">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className={`w-44 h-44 flex justify-center items-center border-4 rounded-full ${pokemonType[1] ? `bg-${pokemonType[0]}` : `bg-slate-200`}`} style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                      <img className="h-36 w-36" src={pokeData.image} />
                     </div>
-                  ))}
-                </div>
 
-                <div className="flex mt-14 gap-2">
-                  <h1 className="text-4xl font-bold underline  decoration-2 decoration-sky-500/30">
-                    #{pokeData.id}.
-                  </h1>
-                  <h1 className="capitalize text-4xl font-bold underline  decoration-2 decoration-sky-500/30" >
-                    {id}
-                  </h1>
-                </div>
-               
-              </div>
+                    <div className="flex gap-6">
+                      {pokeData.types.map((type, index) => (
+                        <div className={`icon ${type} flex flex-col items-center gap-2`} key={index}>
+                          <img src={`/assets/icons/${type}.svg`} alt={type} className="" />
+                          <h3 className="uppercase font-semibold opacity-20">{type}</h3>
+                        </div>
+                      ))}
+                    </div>
 
-              <div>
-                <p className="text-center text-lg">{pokeSpeciesData.desc}</p>
+                    <div className="flex mt-14 gap-2">
+                      <h1 className="text-4xl text-white font-bold underline  decoration-2 decoration-sky-500/30">
+                        #{pokeData.id}.
+                      </h1>
+                      <h1 className="capitalize text-4xl text-white font-bold underline decoration-2 decoration-sky-500/30" >
+                        {id}
+                      </h1>
+                    </div>
+
+                  </div>
+                  <div>
+                    <p className="mb-4 text-center text-lg">{filteredDesc}</p>
+                  </div>
+                </div>
               </div>
             </div>
+            {pokemonEvolutionData ? (
+
+              <div className={`w-1/2 p-5 mx-auto rounded-md ${pokemonType[1] ? `bg-${pokemonType[1]}` : `bg-slate-200`}`}>
+                <h3 className={`text-lg font-semibold text-center md:text-left ${pokemonType[1] ? `text-white` : `text-slate-400`}`}>Evolution Chain</h3>
+                <div className="p-5 flex flex-col items-center gap-4 md:justify-around md:flex-row">
+                  {pokemonEvolutionData && pokemonEvolutionData.map((item, index) => {
+                    if (item) {
+                      // filtered cause 'pokemonEvolutionData' might contain a falsy value.
+                      const filteredPokemonEvolutionData = pokemonEvolutionData.filter(item => item !== undefined)
+                      const isLastItem = index == filteredPokemonEvolutionData.length - 1
+                      return (
+                        <>
+                          <Link to={`/${item.name}`}>
+                            <div className="flex flex-col items-center" key={index}>
+                              <div className={`w-30 h-30 flex justify-center items-center border-4 rounded-full bg-${pokemonType[0]}`} style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                                <img className="h-28 w-28" src={item.image} />
+                              </div>
+                              <p className={`text-md capitalize ${pokemonType[1] ? `text-white` : `text-slate-500`}`}>{item.name}</p>
+                            </div>
+                          </Link>
+                          {!isLastItem && <img className="w-10 md:-rotate-90" src="assets/bottom-arrow.png" />}
+                        </>
+                      )
+                    }
+                  })}
+                </div>
+              </div>
+            ) : <div className="py-16">
+                </div>}
           </div>
+        </>
 
-          {/* ------------------- Bar Chart -------------------
-          <div className="w-full lg:w-8/12 bg-[#242424]">
-            <div className="md:w-2/3 mx-auto mt-20 bg-slate-100 rounded-lg p-4">
-              <Bar options={options} data={barData} />
-            </div>
-          </div> */}
-        </div>
       )}
+
     </>
   );
 }

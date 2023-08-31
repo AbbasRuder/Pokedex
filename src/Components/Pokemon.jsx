@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import PokemonHeading from './PokemonHeading'
 import PokemonCard from './PokemonCard'
 import Pagination from './Pagination'
 import Loading from './Loading'
+
 
 export default function Pokemon() {
     // const [allPokemonData, setAllPokemonData] = useState([])
@@ -12,11 +14,11 @@ export default function Pokemon() {
     const [nextPageURL, setNextPageURL] = useState()
     const [prevPageURL, setPrevPageURL] = useState()
     const [loading, setLoading] = useState(false)
-    const [showLoading, setShowLoading] = useState(true)
+
 
 
     useEffect(() => {
-        // setting loading state to true whenever useeffect loads
+        // setting loading state to true whenever useEffect loads
         setLoading(true)
         setPokemonData([])
         axios.get(currentPageURL).then(response => {
@@ -25,16 +27,15 @@ export default function Pokemon() {
             setNextPageURL(response.data.next)
             setPrevPageURL(response.data.previous)
 
-            // fetching all the data of indiviual pokemons
+            // fetching all the data of individual pokemon's
             const data = response.data.results.map(pokemon => {
                 return axios.get(pokemon.url).then(response => {
                     return response.data
                 })
             })
 
-            //---> Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
+            // Ensuring that all the promises in the data array is resolved before setting 'setPokemonData'
             Promise.all(data).then(response => {
-                // console.log(response);
                 // setAllPokemonData(response);
                 setPokemonData(response.map(poke => (
                     {
@@ -45,11 +46,21 @@ export default function Pokemon() {
                 ))
             })
 
-            // setting loading state to false whenever fetching is completed
+            // If Fetching is complete, displaying the loading screen for at least 1.3s and then setting it to false. --> This is to avoid the quick flashes of the bg which doesn't look good.
             setTimeout(() => {
-                setLoading(false); // Hide the "loading" text (if needed)
-                setShowLoading(false); // Hide the loading screen
-              }, 1300); // 1000 milliseconds = 1 seconds
+                setLoading(false);
+            }, 1300);
+
+            // Get pagination data from local storage 
+            const storedPageData = JSON.parse(localStorage.getItem('pokemonPageData'));
+            if (storedPageData) {
+                setCurrentPageURL(storedPageData.currentPageURL);
+                setNextPageURL(storedPageData.nextPageURL);
+                setPrevPageURL(storedPageData.prevPageURL);
+
+                // cleaning local-Storage to avoid unwanted behaviors
+                localStorage.removeItem('pokemonPageData');
+            }
 
         })
             .catch(error => {
@@ -69,8 +80,16 @@ export default function Pokemon() {
         setCurrentPageURL(prevPageURL)
     }
 
+    // storing the current page url's to local-storage
+    const storePageData = () => {
+        const pageData = {
+            currentPageURL,
+            nextPageURL,
+            prevPageURL,
+        }
+        localStorage.setItem('pokemonPageData', JSON.stringify(pageData))
+    }
 
-    // console.log("data", pokemonData)
 
     return (
         <>
@@ -80,15 +99,13 @@ export default function Pokemon() {
                 ) : (
                     <>
                         {/*------ Main Page Heading ------*/}
-                        <div className="border mb-10">
-                            <h1 className="text-3xl font-bold text-center p-6">Pokemon Cards</h1>
-                        </div>
+                        <PokemonHeading storePageData={storePageData}/>
 
                         {/*------ Pokemon Card Component ------ */}
-                        <div className="mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
+                        <div className="mt-10 mx-16 flex gap-x-10 gap-y-4 justify-center flex-wrap mb-10">
                             {pokemonData.map(mapItem =>
                                 <Link to={mapItem.name} key={mapItem.name}>
-                                    <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} />
+                                    <PokemonCard key={mapItem.name} name={mapItem.name} image={mapItem.image} types={mapItem.types} storePageData={storePageData} />
                                 </Link>)}
                         </div>
 
@@ -103,6 +120,5 @@ export default function Pokemon() {
 
 
         </>
-        // <></>
     )
 }

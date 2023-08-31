@@ -92,6 +92,8 @@ export default function PokemonDetails() {
 
   const filteredDesc = pokeSpeciesData && pokeSpeciesData.desc.replace('POKéMON', 'pokemon')
 
+  const pokemonType = pokeData && pokeData.types.map(item => item)
+
   return (
     <>
       <PokemonHeading />
@@ -101,14 +103,14 @@ export default function PokemonDetails() {
 
         pokeData &&
         <>
-          <div className="bg-slate-100 pb-10">
+          <div className={`pb-10 ${pokemonType[1] ? `bg-gradient-to-r from-${pokemonType[0]} to-${pokemonType[1]}` : `bg-${pokemonType[0]}`}`}>
             <div className="flex flex-col lg:flex-row">
 
               <div className="w-full px-6 pt-20">
 
                 <div className="flex flex-col gap-16">
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-44 h-44 flex justify-center items-center border-4 rounded-full bg-slate-300" style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                    <div className={`w-44 h-44 flex justify-center items-center border-4 rounded-full ${pokemonType[1] ? `bg-${pokemonType[0]}` : `bg-slate-200`}`} style={{ borderColor: `${pokeSpeciesData.color}` }}>
                       <img className="h-36 w-36" src={pokeData.image} />
                     </div>
 
@@ -122,10 +124,10 @@ export default function PokemonDetails() {
                     </div>
 
                     <div className="flex mt-14 gap-2">
-                      <h1 className="text-4xl font-bold underline  decoration-2 decoration-sky-500/30">
+                      <h1 className="text-4xl text-white font-bold underline  decoration-2 decoration-sky-500/30">
                         #{pokeData.id}.
                       </h1>
-                      <h1 className="capitalize text-4xl font-bold underline  decoration-2 decoration-sky-500/30" >
+                      <h1 className="capitalize text-4xl text-white font-bold underline decoration-2 decoration-sky-500/30" >
                         {id}
                       </h1>
                     </div>
@@ -137,32 +139,35 @@ export default function PokemonDetails() {
                 </div>
               </div>
             </div>
+            {pokemonEvolutionData ? (
 
-            <div className="w-1/2 p-5 mx-auto rounded-md bg-slate-200">
-              <h3 className="text-lg font-semibold text-center md:text-left text-slate-400">Evolution Chain</h3>
-              <div className="p-5 flex flex-col items-center gap-4 md:justify-around md:flex-row">
-                {pokemonEvolutionData && pokemonEvolutionData.map((item, index) => {
-                  if (item) {
-                    // filtered cause 'pokemonEvolutionData' might contain a falsy value.
-                    const filteredPokemonEvolutionData = pokemonEvolutionData.filter(item => item !== undefined)
-                    const isLastItem = index == filteredPokemonEvolutionData.length - 1
-                    return (
-                      <>
-                        <Link to={`/${item.name}`}>
-                          <div className="flex flex-col items-center" key={index}>
-                            <div className="w-30 h-30 flex justify-center items-center border-4 rounded-full bg-slate-100" style={{ borderColor: `${pokeSpeciesData.color}` }}>
-                              <img className="h-28 w-28" src={item.image} />
+              <div className={`w-1/2 p-5 mx-auto rounded-md ${pokemonType[1] ? `bg-${pokemonType[1]}` : `bg-slate-200`}`}>
+                <h3 className={`text-lg font-semibold text-center md:text-left ${pokemonType[1] ? `text-white` : `text-slate-400`}`}>Evolution Chain</h3>
+                <div className="p-5 flex flex-col items-center gap-4 md:justify-around md:flex-row">
+                  {pokemonEvolutionData && pokemonEvolutionData.map((item, index) => {
+                    if (item) {
+                      // filtered cause 'pokemonEvolutionData' might contain a falsy value.
+                      const filteredPokemonEvolutionData = pokemonEvolutionData.filter(item => item !== undefined)
+                      const isLastItem = index == filteredPokemonEvolutionData.length - 1
+                      return (
+                        <>
+                          <Link to={`/${item.name}`}>
+                            <div className="flex flex-col items-center" key={index}>
+                              <div className={`w-30 h-30 flex justify-center items-center border-4 rounded-full bg-${pokemonType[0]}`} style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                                <img className="h-28 w-28" src={item.image} />
+                              </div>
+                              <p className={`text-md capitalize ${pokemonType[1] ? `text-white` : `text-slate-500`}`}>{item.name}</p>
                             </div>
-                            <p className="text-md capitalize text-slate-500">{item.name}</p>
-                          </div>
-                        </Link>
-                        {!isLastItem && <img className="w-10 md:-rotate-90" src="assets/bottom-arrow.png" />}
-                      </>
-                    )
-                  }
-                })}
+                          </Link>
+                          {!isLastItem && <img className="w-10 md:-rotate-90" src="assets/bottom-arrow.png" />}
+                        </>
+                      )
+                    }
+                  })}
+                </div>
               </div>
-            </div>
+            ) : <div className="py-16">
+                </div>}
           </div>
         </>
 

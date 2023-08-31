@@ -7,18 +7,18 @@ export default function Pagination({gotoNextPage, gotoPrevPage}) {
             {gotoPrevPage ? (
                 <button className='px-4 py-2 rounded-md bg-sky-500 text-white hover:bg-sky-700' 
                 onClick={gotoPrevPage}>
-                    ⏮️Prev
+                    <span className='font-semibold md:text-lg'>⏮️Prev</span>
                 </button>
             ) : (
                 <button className='px-4 py-2 rounded-md bg-sky-300 text-white' 
                 disabled>
-                    ⏮️Prev
+                    <span className='font-semibold md:text-lg'>⏮️Prev</span>
                 </button>
             )}
 
             <button className='ml-2 px-4 py-2 rounded-md bg-sky-500 text-white hover:bg-sky-700' 
             onClick={gotoNextPage}>
-                Next⏭️
+                <span className='font-semibold md:text-lg'>Next⏭️</span>
             </button>
         </div>
     </>

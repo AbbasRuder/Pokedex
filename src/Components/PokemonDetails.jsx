@@ -4,6 +4,7 @@ import Loading from "./Loading";
 import './PokemonCard.css'
 import PokemonHeading from "./PokemonHeading";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function PokemonDetails() {
@@ -39,7 +40,7 @@ export default function PokemonDetails() {
         setPokeData(data);
 
         const speciesData = {
-          desc: pokemonSpeciesData.data.flavor_text_entries[0].flavor_text,
+          desc: pokemonSpeciesData.data.flavor_text_entries[10].flavor_text,
           happiness: pokemonSpeciesData.data.base_happiness,
           capture_rate: pokemonSpeciesData.data.capture_rate,
           color: pokemonSpeciesData.data.color.name,
@@ -89,6 +90,8 @@ export default function PokemonDetails() {
 
   }, [id]);
 
+  const filteredDesc = pokeSpeciesData && pokeSpeciesData.desc.replace('POKéMON', 'pokemon')
+
   return (
     <>
       <PokemonHeading />
@@ -129,7 +132,7 @@ export default function PokemonDetails() {
 
                   </div>
                   <div>
-                    <p className="mb-4 text-center text-lg">{pokeSpeciesData.desc}</p>
+                    <p className="mb-4 text-center text-lg">{filteredDesc}</p>
                   </div>
                 </div>
               </div>
@@ -145,13 +148,15 @@ export default function PokemonDetails() {
                     const isLastItem = index == filteredPokemonEvolutionData.length - 1
                     return (
                       <>
-                        <div className="flex flex-col items-center" key={index}>
-                          <div className="w-30 h-30 flex justify-center items-center border-4 rounded-full bg-slate-100" style={{ borderColor: `${pokeSpeciesData.color}` }}>
-                            <img className="h-28 w-28" src={item.image} />
+                        <Link to={`/${item.name}`}>
+                          <div className="flex flex-col items-center" key={index}>
+                            <div className="w-30 h-30 flex justify-center items-center border-4 rounded-full bg-slate-100" style={{ borderColor: `${pokeSpeciesData.color}` }}>
+                              <img className="h-28 w-28" src={item.image} />
+                            </div>
+                            <p className="text-md capitalize text-slate-500">{item.name}</p>
                           </div>
-                          <p className="text-md capitalize text-slate-500">{item.name}</p>
-                        </div>
-                        {!isLastItem && <img className="w-10 md:-rotate-90" src="assets/bottom-arrow.png"/>}
+                        </Link>
+                        {!isLastItem && <img className="w-10 md:-rotate-90" src="assets/bottom-arrow.png" />}
                       </>
                     )
                   }

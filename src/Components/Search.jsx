@@ -59,7 +59,7 @@ export default function Search({storePageData}) {
                 <div className="mt-1 absolute w-full max-h-52 overflow-auto rounded bg-slate-200">
                 {filteredSearchNames && filteredSearchNames.map((item, index) => {
                     return (
-                        <Link to={item} key={index}>
+                        <Link to={`/${item}`} key={index}>
                             <div className='mb-0.5 p-2 rounded bg-slate-100 cursor' key={index} onClick={storePageData}>{item}</div>
                         </Link>
                             )
